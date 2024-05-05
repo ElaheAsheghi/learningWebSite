@@ -32,10 +32,15 @@ exports.register = async (req, res) => {
             role: countOfUsers > 0 ? "USER" : "ADMIN",
         }
     );
+
+    const userObject = user.toObject(); //change user to js object format
+    Reflect.deleteProperty(userObject, "password"); //delete password property from user 
+                                                    //to show user without password to client
+
     //we should create a token for any user  //payload data/secretKey/options
     const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30 day" });
 
-    return res.status(201).json({ user, accessToken }); //return user and the token we have made
+    return res.status(201).json({ user: userObject, accessToken }); //return user and the token we have made
 };                                                      //to frontEnd
 
 exports.login = async (req, res) => {
