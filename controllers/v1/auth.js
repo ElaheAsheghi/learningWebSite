@@ -2,6 +2,7 @@ const userModel = require('../../models/user');
 const registerValidator = require('../../validators/register');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const banUserModel = require('../../models/ban-phone');
 
 exports.register = async (req, res) => {
     const validationResult = registerValidator(req.body); //check information validation
@@ -14,6 +15,14 @@ exports.register = async (req, res) => {
     const isUserExist = await userModel.findOne({ //check that if there is any
         $or: [{ username }, { email }],           //user with this username or email
     });
+
+    const isUserBan = await banUserModel.find({ phone })
+
+    if(isUserBan.length) {
+        return res.status(409).json({
+            message: "This phone is banned!"
+        })
+    };
 
     if(isUserExist) {
         return res.status(409).json({
