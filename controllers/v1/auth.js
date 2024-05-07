@@ -29,7 +29,7 @@ exports.register = async (req, res) => {
             message: "username or email is duplicated."
         });
     };
-    const countOfUsers = await userModel.count();
+    const countOfUsers = await userModel.countDocuments();
     const hashedPassword = await bcrypt.hash(password, 10); //here we use await keyWord so no need to hashSync
     const user = await userModel.create(
         {

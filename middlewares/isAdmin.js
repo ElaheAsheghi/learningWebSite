@@ -5,7 +5,7 @@ module.exports = async (req, res, next) => {
 
     if(isAdmin) {
         return next();
-    };
+    }
 
     return res.status(403).json({
         message: "This route is accessable for admins!"

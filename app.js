@@ -16,6 +16,6 @@ app.use(bodyParser.urlencoded({ extended: false })); //for uploading files
 app.use(bodyParser.json()); //for bodies with json type
 
 app.use("/v1/auth", authRouter);
-app.use("v1/user", userRouter);
+app.use("/v1/user", userRouter);
 
 module.exports = app;

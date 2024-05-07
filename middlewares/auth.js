@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
             message: "This route is protected and you don't have permission to access it!"
         })
     };
-
+    
     const token = authHeader[1]; //First index is token name that declared in request and second one
                                 //is token.these are seperated by a space.like: Bearer gtrsryrdr567ddrhdh...
     try {
@@ -20,10 +20,10 @@ module.exports = async (req, res, next) => {
         //user id has saved in token
         const user = await userModel.findById(jwtPayload.id).lean(); 
 
-        Reflect.defineProperty(user, "password");
-
+        Reflect.deleteProperty(user, "password");
+ 
         req.user = user; //To give access to this user in next func and send user in req.
-
+     
         next();
     } catch (error) {
         return res.json(error)
