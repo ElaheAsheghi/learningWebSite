@@ -6,6 +6,10 @@ const isAdminMiddleware = require('../../middlewares/isAdmin');
 const router = express.Router();
 
 router
+    .route("/role")
+    .put(userController.changeRole);
+
+router
     .route("/")
     .get(authMiddleware, isAdminMiddleware, userController.getAll);
 

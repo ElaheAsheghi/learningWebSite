@@ -40,3 +40,42 @@ exports.removeUser = async (req, res) => {
         message: "User have deleted successfully"
     });
 };
+
+exports.changeRole = async (req, res) => {
+    const {id} = req.body;
+    const isValidUserId = mongoose.Types.ObjectId.isValid(id);
+
+    if(!isValidUserId) {
+        res.status(409).json({
+            message: "This user id is not valid."
+        })
+    };
+
+    const user = await userModel.findOne({_id: id});
+
+    if(!user) {
+        res.status(404).json({
+            message: "User not found!"
+        })
+    };
+
+    let newRole = user.role === "ADMIN" ? "USER" : "ADMIN";
+
+    const updatedUser = await userModel.findOneAndUpdate(
+        {_id: id},
+        {
+            role: newRole
+        }
+    );
+
+    if(!updatedUser) {
+        res.status(500).json({
+            message: "Server error!"
+        })
+    };
+
+    res.status(200).json({
+        message: "User role has updated successfully."
+    })
+    
+};
